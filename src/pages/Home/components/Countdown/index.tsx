@@ -58,6 +58,8 @@ export function Countdown() {
   useEffect(() => {
     if (activeCycle) {
       document.title = `${minutesWithZeroFill}:${secondsWithZeroFill}`
+    } else {
+      console.log('Ignite Timer')
     }
   }, [minutesWithZeroFill, secondsWithZeroFill, activeCycle])
 

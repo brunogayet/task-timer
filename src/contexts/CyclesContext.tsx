@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react'
 import {
-  ActionTypes,
   addNewCycleAction,
   markCurrentCycleAsFinishedAction,
   stopCurrentCycleAction,
@@ -30,23 +29,25 @@ interface CyclesContextType {
   setSecondsPassed: (seconds: number) => void
 }
 
-export const CyclesContext = createContext({} as CyclesContextType)
-
 interface CyclesContextProviderProps {
   children: ReactNode
 }
+
+export const CyclesContext = createContext({} as CyclesContextType)
 
 export function CyclesContextProvider({
   children,
 }: CyclesContextProviderProps) {
   // const [cycles, setCycles] = useState<Cycle[]>([])
+  const initialCycle = {
+    cycles: [],
+    activeCycleId: null,
+  }
+
   const [cyclesState, dispatch] = useReducer(
     cyclesReducer,
-    {
-      cycles: [],
-      activeCycleId: null,
-    },
-    () => {
+    initialCycle,
+    (initialCycle) => {
       const storedStateAsJSON = localStorage.getItem(
         '@ignite-timer:cycles-state-1.0.0',
       )
@@ -54,6 +55,8 @@ export function CyclesContextProvider({
       if (storedStateAsJSON) {
         return JSON.parse(storedStateAsJSON)
       }
+
+      return initialCycle
     },
   )
 
